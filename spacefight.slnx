@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="spacefight/spacefight.vcxproj" Id="62c87562-c7e1-4706-8b1f-3cac3293ce4b" />
+</Solution>
