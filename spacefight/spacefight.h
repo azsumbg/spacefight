@@ -385,7 +385,42 @@ namespace dll
 		}
 	};
 
+	class SPACEFIGHT_API PROTON
+	{
+	protected:
+		float _width{ 0 };
+		float _height{ 0 };
 
+		bool in_heap{ false };
+
+	public:
+		D2D1_POINT_2F start{};
+		D2D1_POINT_2F end{};
+		D2D1_POINT_2F center{};
+
+		D2D1_RECT_F my_rect{};
+
+		float x_rad{ 0 };
+		float y_rad{ 0 };
+
+		PROTON();
+		PROTON(D2D1_POINT_2F start_point);
+		PROTON(D2D1_POINT_2F start_point, float first_width, float first_height);
+		PROTON(float first_x, float first_y, float first_width, float first_height);
+
+		virtual ~PROTON();
+
+		float get_width() const;
+		float get_height() const;
+
+		void set_edges();
+
+		void set_width(float new_width);
+		void set_height(float new_height);
+		void new_dims(float new_width, float new_height);
+	
+		static PROTON* create(float first_x, float first_y, float first_width, float first_height);
+	};
 
 
 }
