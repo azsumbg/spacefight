@@ -258,6 +258,38 @@ namespace dll
 				}
 			}
 		}
+		void insert(T* element, size_t index)
+		{
+			if (!main_ptr)throw EXCEPTION(ERR_PTR);
+			else
+			{
+				if (index >= next_pos)throw EXCEPTION(ERR_INDEX);
+				else
+				{
+					if (next_pos + 1 <= max_size)
+					{
+						for (size_t i = next_pos; i > index; --i)main_ptr[index] = main_ptr[index - 1];
+						main_ptr[index] = *element;
+						++next_pos;
+					}
+					else
+					{
+						++max_size;
+						T* temp_ptr = reinterpret_cast<T*>(realloc(main_ptr, max_size * sizeof(T)));
+						if (!temp_ptr)throw EXCEPTION(ERR_PTR);
+						else
+						{
+							main_ptr = temp_ptr;
+							temp_ptr = nullptr;
+
+							for (size_t i = next_pos; i > index; --i)main_ptr[index] = main_ptr[index - 1];
+							main_ptr[index] = *element;
+							++next_pos;
+						}
+					}
+				}
+			}
+		}
 		void erase(size_t index)
 		{
 			if (!main_ptr)throw EXCEPTION(ERR_PTR);
@@ -337,6 +369,19 @@ namespace dll
 					}
 				}
 			}
+		}
+
+		T& front()
+		{
+			if (empty())throw EXCEPTION(ERR_INDEX);
+
+			return *main_ptr;
+		}
+		T& back()
+		{
+			if (empty())throw EXCEPTION(ERR_INDEX);
+
+			return main_ptr[next_pos - 1];
 		}
 	};
 
