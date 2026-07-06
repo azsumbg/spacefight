@@ -232,3 +232,59 @@ dll::PROTON* dll::PROTON::create(float first_x, float first_y, float first_width
 }
 
 //////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// FUNCTIONS **********************************
+
+float dll::distance(D2D1_POINT_2F first, D2D1_POINT_2F second)
+{
+	float a = (float)(pow(abs(second.x - first.x), 2));
+	float b = (float)(pow(abs(second.y - first.y), 2));
+
+	return (float)(sqrt(a + b));
+}
+
+float dll::rotate_angle(dirs to_where, float current_angle)
+{
+	float rad_angle{ current_angle * 3.14f / 180.0f };
+
+	if (to_where == dirs::up && rad_angle <= 45.0f) ++rad_angle;
+	else --rad_angle;
+
+	return rad_angle;
+}
+
+bool dll::intersect(D2D1_RECT_F first, D2D1_RECT_F second)
+{
+	if (!(first.left >= second.right || first.right <= second.left || first.top >= second.bottom || first.bottom <= second.top))
+		return true;
+
+	return false;
+}
+
+bool dll::intersect(D2D1_POINT_2F first_center, D2D1_POINT_2F second_center,
+	float first_xrad, float second_xrad, float first_yrad, float second_yrad)
+{
+	if (abs(second_center.x - first_center.x) <= first_xrad + second_xrad &&
+		abs(second_center.y - first_center.y) <= first_yrad + second_yrad)return true;
+
+	return false;
+}

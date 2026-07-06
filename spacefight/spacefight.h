@@ -423,4 +423,17 @@ namespace dll
 	};
 
 
+
+
+
+	// FUNCTIONS **********************************
+
+	float SPACEFIGHT_API distance(D2D1_POINT_2F first, D2D1_POINT_2F second);
+
+	float SPACEFIGHT_API rotate_angle(dirs to_where, float current_angle);
+
+	bool SPACEFIGHT_API intersect(D2D1_RECT_F first, D2D1_RECT_F second);
+
+	bool SPACEFIGHT_API intersect(D2D1_POINT_2F first_center, D2D1_POINT_2F second_center,
+		float first_xrad, float second_xrad, float first_yrad, float second_yrad);
 }
