@@ -24,6 +24,8 @@ constexpr int ERR_UNK{ 5004 };
 
 enum class dirs { up = 0, down = 1, left = 2, right = 3, stop = 4 };
 enum class evils { fighter = 0, cruiser = 1, shuttle = 2, ship = 3 };
+enum class background { intro = 0, field = 1 };
+
 
 namespace dll
 {
@@ -422,7 +424,22 @@ namespace dll
 		static PROTON* create(float first_x, float first_y, float first_width, float first_height);
 	};
 
+	class SPACEFIGHT_API BACKGROUND: public PROTON
+	{
+	private:
+		int current_frame = 0;
+		int max_frames = 0;
+		int frame_delay = 1;
+		int max_frame_delay = 1;
 
+	public:
+		background type = background::intro;
+
+		BACKGROUND(background what);
+
+		int frame();
+
+	};
 
 
 

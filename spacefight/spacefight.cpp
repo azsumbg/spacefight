@@ -233,7 +233,37 @@ dll::PROTON* dll::PROTON::create(float first_x, float first_y, float first_width
 
 //////////////////////////////////////////////////
 
+// BACKGROUND CLASS ******************************
 
+dll::BACKGROUND::BACKGROUND(background what) :PROTON(D2D1_POINT_2F(0, 0), scr_width, scr_height)
+{
+	type = what;
+
+	max_frames = 48;
+	
+	if (type == background::field)
+	{
+		start.y = 50.0f;
+		set_edges();
+		max_frames = 49;
+	}
+}
+
+int dll::BACKGROUND::frame()
+{
+	--frame_delay;
+
+	if (frame_delay <= 0)
+	{
+		frame_delay = max_frame_delay;
+		++current_frame;
+		if (current_frame >= max_frames)current_frame = 0;
+	}
+
+	return current_frame;
+}
+
+//////////////////////////////////////////////////
 
 
 
