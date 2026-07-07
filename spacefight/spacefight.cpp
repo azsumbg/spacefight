@@ -265,13 +265,106 @@ int dll::BACKGROUND::frame()
 
 //////////////////////////////////////////////////
 
+// CREATURES CLASS *******************************
 
+dll::CREATURES::CREATURES(creatures _what, float _sx, float _sy) :PROTON(D2D1_POINT_2F(_sx, _sy))
+{
+	type = _what;
 
+	switch (type)
+	{
+	case creatures::hero:
+		speed = 3.0f;
+		max_frames = 5;
+		frame_delay = 13;
+		armor = 1;
+		lifes = 150;
+		strenght = 20;
+		break;
 
+	case creatures::fighter:
+		speed = 1.0f;
+		armor = 1;
+		lifes = 100;
+		strenght = 10;
+		attack_delay = 80;
+		break;
 
+	case creatures::cruiser:
+		speed = 0.7f;
+		armor = 4;
+		lifes = 200;
+		strenght = 20;
+		attack_delay = 100;
+		break;
 
+	case creatures::ship:
+		speed = 0.8f;
+		armor = 3;
+		lifes = 150;
+		strenght = 15;
+		attack_delay = 90;
+		break;
 
+	case creatures::shuttle:
+		speed = 1.4f;
+		armor = 1;
+		lifes = 80;
+		strenght = 8;
+		attack_delay = 70;
+		break;
+	}
 
+	max_frame_delay = frame_delay;
+}
+
+void dll::CREATURES::set_path(float targ_x, float targ_y)
+{
+	hor_dir = false;
+	ver_dir = false;
+
+	move_sx = start.x;
+	move_ex = targ_x;
+
+	move_sy = start.y;
+	move_ey = targ_y;
+
+	if ((move_sx == move_ex) || (move_ex > start.x && move_ex <= end.x))
+	{
+		ver_dir = true;
+		return;
+	}
+	if ((move_sy == move_ey) || (move_ey > start.y && move_ey <= end.y))
+	{
+		hor_dir = true;
+		return;
+	}
+
+	slope = (move_ey - move_sy) / (move_ex - move_sx);
+	intercept = start.y - slope * start.x;
+}
+
+bool move();
+
+int attack();
+
+int get_frame();
+
+void Release();
+
+CREATURES* create(creatures what, float sx, float sy);
+
+float dll::CREATURES::rotate_angle(float oppos, float adjanced)
+{
+	if (move_ex < move_sx)oppos = -oppos;
+	if (move_ey < move_sy)adjanced = -adjanced;
+
+	float rad_angle{ std::atan2(oppos, adjanced) };
+
+	return rad_angle;
+}
+
+//////////////////////////////////////////////////
 
 
 
@@ -290,16 +383,6 @@ float dll::distance(D2D1_POINT_2F first, D2D1_POINT_2F second)
 	float b = (float)(pow(abs(second.y - first.y), 2));
 
 	return (float)(sqrt(a + b));
-}
-
-float dll::rotate_angle(dirs to_where, float current_angle)
-{
-	float rad_angle{ current_angle * 3.14f / 180.0f };
-
-	if (to_where == dirs::up && rad_angle <= 45.0f) ++rad_angle;
-	else --rad_angle;
-
-	return rad_angle;
 }
 
 bool dll::intersect(D2D1_RECT_F first, D2D1_RECT_F second)

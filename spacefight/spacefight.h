@@ -23,12 +23,35 @@ constexpr int ERR_PARAM{ 5003 };
 constexpr int ERR_UNK{ 5004 };
 
 enum class dirs { up = 0, down = 1, left = 2, right = 3, stop = 4 };
-enum class evils { fighter = 0, cruiser = 1, shuttle = 2, ship = 3 };
+enum class creatures { fighter = 0, cruiser = 1, shuttle = 2, ship = 3, hero = 4 };
 enum class background { intro = 0, field = 1 };
-
+enum class assets { armor = 0, life = 1, shot = 2 };
 
 namespace dll
 {
+	struct SPACEFIGHT_API FADING
+	{
+	private:
+		float opacity{ 1.0f };
+		int delay = 80;
+
+	public:
+		assets type{ assets::armor };
+		D2D1_RECT_F rect{};
+		
+		float get_opacity()
+		{
+			--delay;
+			if (delay <= 0)
+			{
+				delay = 80;
+				opacity -= 0.1f;
+			}
+
+			return opacity;
+		}
+	};
+
 	class SPACEFIGHT_API EXCEPTION
 	{
 	private:
@@ -441,16 +464,65 @@ namespace dll
 
 	};
 
+	class SPACEFIGHT_API CREATURES :public PROTON
+	{
+	private:
+		int current_frame{ 0 };
+		int max_frames{ 0 };
+		int frame_delay{ 0 };
+		int max_frame_delay{ 0 };
+
+		int attack_delay{ 0 };
+		int max_attack_delay{ 0 };
+		
+		float speed{ 1.0f };
+
+		float move_sx{ 0 };
+		float move_sy{ 0 };
+		float move_ex{ 0 };
+		float move_ey{ 0 };
+
+		float slope{ 0 };
+		float intercept{ 0 };
+
+		bool hor_dir{ false };
+		bool ver_dir{ false };
+
+		CREATURES(creatures _what, float _sx, float _sy);
+		
+	public:
+		creatures type{ creatures::hero };
+		int lifes = 0;
+		int strenght{ 0 };
+		int armor{ 0 };
+		
+		float angle{ 0 };
+
+		void set_path(float targ_x, float targ_y);
+
+		bool move();
+		
+		int attack();
+
+		int get_frame();
+
+		void Release();
+
+		float rotate_angle(float oppos, float adjanced);
+	
+		static CREATURES* create(creatures what, float sx, float sy);
+	};
 
 
 	// FUNCTIONS **********************************
 
 	float SPACEFIGHT_API distance(D2D1_POINT_2F first, D2D1_POINT_2F second);
 
-	float SPACEFIGHT_API rotate_angle(dirs to_where, float current_angle);
-
 	bool SPACEFIGHT_API intersect(D2D1_RECT_F first, D2D1_RECT_F second);
 
 	bool SPACEFIGHT_API intersect(D2D1_POINT_2F first_center, D2D1_POINT_2F second_center,
 		float first_xrad, float second_xrad, float first_yrad, float second_yrad);
+
+	void SPACEFIGHT_API AIMove(CREATURES& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1_POINT_2F>& meteor_centeres,
+		D2D1_POINT_2F Hero_center);
 }
