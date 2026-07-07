@@ -23,7 +23,9 @@ constexpr int ERR_PARAM{ 5003 };
 constexpr int ERR_UNK{ 5004 };
 
 enum class dirs { up = 0, down = 1, left = 2, right = 3, stop = 4 };
-enum class creatures { fighter = 0, cruiser = 1, shuttle = 2, ship = 3, hero = 4 };
+enum class actions { patrol = 0, move = 1, attack = 2 };
+
+enum class creatures { fighter = 0, cruiser = 1, shuttle = 2, ship = 3, hero = 4,shot = 5 };
 enum class background { intro = 0, field = 1 };
 enum class assets { armor = 0, life = 1, shot = 2 };
 
@@ -476,6 +478,7 @@ namespace dll
 		int max_attack_delay{ 0 };
 		
 		float speed{ 1.0f };
+		float view_range{ 0 };
 
 		float move_sx{ 0 };
 		float move_sy{ 0 };
@@ -492,6 +495,10 @@ namespace dll
 		
 	public:
 		creatures type{ creatures::hero };
+		actions action = actions::patrol;
+		
+		dirs dir{ dirs::stop };
+
 		int lifes = 0;
 		int strenght{ 0 };
 		int armor{ 0 };
@@ -501,10 +508,18 @@ namespace dll
 		void set_path(float targ_x, float targ_y);
 
 		void move(float gear);
+
+		bool shot_move(float gear);
 		
 		int attack();
 
 		int get_frame();
+
+		float get_view_range() const;
+
+		float get_move_target_x() const;
+
+		float get_move_target_y() const;
 
 		void Release();
 
@@ -512,7 +527,6 @@ namespace dll
 	
 		static CREATURES* create(creatures what, float sx, float sy);
 	};
-
 
 	// FUNCTIONS **********************************
 
@@ -523,6 +537,8 @@ namespace dll
 	bool SPACEFIGHT_API intersect(D2D1_POINT_2F first_center, D2D1_POINT_2F second_center,
 		float first_xrad, float second_xrad, float first_yrad, float second_yrad);
 
-	void SPACEFIGHT_API AIMove(CREATURES& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1_POINT_2F>& meteor_centeres,
-		D2D1_POINT_2F Hero_center);
+	void SPACEFIGHT_API sort(BAG<D2D1_POINT_2F>& bag, D2D1_POINT_2F target);
+
+	void SPACEFIGHT_API AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1_POINT_2F>& meteor_centeres,
+		D2D1_POINT_2F hero_center);
 }
