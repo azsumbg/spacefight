@@ -500,7 +500,7 @@ namespace dll
 
 		void set_path(float targ_x, float targ_y);
 
-		bool move();
+		void move(float gear);
 		
 		int attack();
 

@@ -344,15 +344,140 @@ void dll::CREATURES::set_path(float targ_x, float targ_y)
 	intercept = start.y - slope * start.x;
 }
 
-bool move();
+void dll::CREATURES::move(float gear)
+{
+	float my_speed = speed + gear / 10.0f;
 
-int attack();
+	if (ver_dir)
+	{
+		if (move_ey < move_sy)
+		{
+			if (start.y - my_speed >= sky)
+			{
+				start.y -= my_speed;
+				set_edges();
+			}
+		}
+		if (move_ey > move_sy)
+		{
+			if (end.y + my_speed <= ground)
+			{
+				start.y += my_speed;
+				set_edges();
+			}
+		}
+	}
+	else if (hor_dir)
+	{
+		if (move_ex < move_sx)
+		{
+			if (start.x - my_speed >= 0)
+			{
+				start.x -= my_speed;
+				set_edges();
+			}
+		}
+		if (move_ex > move_sx)
+		{
+			if (end.x + my_speed <= scr_width)
+			{
+				start.x += my_speed;
+				set_edges();
+			}
+		}
+	}
+	else
+	{
+		if (move_ex < move_sx)
+		{
+			if (start.x - my_speed >= 0)
+			{
+				start.x -= my_speed;
+				start.y = start.x * slope + intercept;
+				set_edges();
 
-int get_frame();
+				if (start.x < 0)
+				{
+					start.x = 0;
+					set_edges();
+				}
+				if (start.y < sky)
+				{
+					start.y = sky;
+					set_edges();
+				}
+				if (end.y > ground)
+				{
+					start.y = ground - get_height();
+					set_edges();
+				}
+			}
+		}
+		if (move_ex > move_sx)
+		{
+			if (end.x + my_speed <= scr_width)
+			{
+				start.x += my_speed;
+				start.y = start.x * slope + intercept;
+				set_edges();
 
-void Release();
+				if (end.x > scr_width)
+				{
+					start.x = scr_width - get_width();
+					set_edges();
+				}
+				if (start.y < sky)
+				{
+					start.y = sky;
+					set_edges();
+				}
+				if (end.y > ground)
+				{
+					start.y = ground - get_height();
+					set_edges();
+				}
+			}
+		}
+	}
+}
 
-CREATURES* create(creatures what, float sx, float sy);
+int dll::CREATURES::attack()
+{
+	--attack_delay;
+
+	if (attack_delay <= 0)
+	{
+		attack_delay = max_attack_delay;
+		return strenght;
+	}
+
+	return 0;
+}
+
+int dll::CREATURES::get_frame()
+{
+	--frame_delay;
+	if (frame_delay <= 0)
+	{
+		frame_delay = max_frame_delay;
+		++current_frame;
+		if (current_frame > max_frames)current_frame = 0;
+	}
+
+	return current_frame;
+}
+
+void dll::CREATURES::Release()
+{
+	delete this;
+}
+
+dll::CREATURES* dll::CREATURES::create(creatures what, float sx, float sy)
+{
+	CREATURES* ret{ new CREATURES(what, sx, sy) };
+
+	return ret;
+}
 
 float dll::CREATURES::rotate_angle(float oppos, float adjanced)
 {
