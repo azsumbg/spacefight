@@ -345,7 +345,7 @@ namespace dll
 				{
 					if (next_pos + 1 <= max_size)
 					{
-						for (size_t i = next_pos; i > 0; --i)main_ptr[index] = main_ptr[index - 1];
+						for (size_t index = next_pos; index > 0; --index)main_ptr[index] = main_ptr[index - 1];
 						*main_ptr = element;
 						++next_pos;
 					}
@@ -358,7 +358,7 @@ namespace dll
 						{
 							main_ptr = temp_ptr;
 							temp_ptr = nullptr;
-							for (size_t i = next_pos; i > 0; --i)main_ptr[index] = main_ptr[index - 1];
+							for (size_t index = next_pos; index > 0; --index)main_ptr[index] = main_ptr[index - 1];
 							*main_ptr = element;
 							++next_pos;
 						}
@@ -376,7 +376,7 @@ namespace dll
 				{
 					if (next_pos + 1 <= max_size)
 					{
-						for (size_t i = next_pos; i > 0; --i)main_ptr[index] = main_ptr[index - 1];
+						for (size_t index = next_pos; index > 0; --index)main_ptr[index] = main_ptr[index - 1];
 						*main_ptr = *element;
 						++next_pos;
 					}
@@ -389,7 +389,7 @@ namespace dll
 						{
 							main_ptr = temp_ptr;
 							temp_ptr = nullptr;
-							for (size_t i = next_pos; i > 0; --i)main_ptr[index] = main_ptr[index - 1];
+							for (size_t index = next_pos; index > 0; --index)main_ptr[index] = main_ptr[index - 1];
 							*main_ptr = *element;
 							++next_pos;
 						}
