@@ -274,6 +274,7 @@ dll::CREATURES::CREATURES(creatures _what, float _sx, float _sy) :PROTON(D2D1_PO
 	switch (type)
 	{
 	case creatures::hero:
+		new_dims(64.0f, 80.0f);
 		speed = 3.0f;
 		max_frames = 5;
 		frame_delay = 13;
@@ -283,12 +284,14 @@ dll::CREATURES::CREATURES(creatures _what, float _sx, float _sy) :PROTON(D2D1_PO
 		break;
 
 	case creatures::shot:
+		new_dims(13.0f, 30.0f);
 		speed = 8.0f;
 		max_frames = 11;
 		frame_delay = 6;
 		break;
 
 	case creatures::fighter:
+		new_dims(100.0f, 40.0f);
 		speed = 1.0f;
 		armor = 1;
 		lifes = 100;
@@ -298,6 +301,7 @@ dll::CREATURES::CREATURES(creatures _what, float _sx, float _sy) :PROTON(D2D1_PO
 		break;
 
 	case creatures::cruiser:
+		new_dims(102.0f, 100.0f);
 		speed = 0.7f;
 		armor = 4;
 		lifes = 200;
@@ -307,6 +311,7 @@ dll::CREATURES::CREATURES(creatures _what, float _sx, float _sy) :PROTON(D2D1_PO
 		break;
 
 	case creatures::ship:
+		new_dims(100.0f, 83.0f);
 		speed = 0.8f;
 		armor = 3;
 		lifes = 150;
@@ -316,6 +321,7 @@ dll::CREATURES::CREATURES(creatures _what, float _sx, float _sy) :PROTON(D2D1_PO
 		break;
 
 	case creatures::shuttle:
+		new_dims(95.0f, 67.0f);
 		speed = 1.4f;
 		armor = 1;
 		lifes = 80;
