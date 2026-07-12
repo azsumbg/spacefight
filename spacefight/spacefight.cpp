@@ -376,18 +376,24 @@ void dll::CREATURES::move(float gear)
 			{
 				start.y -= my_speed;
 				set_edges();
+				if (start.y <= move_ey)hero_moving = false;
 			}
+			else hero_moving = false;
+			
 		}
-		if (move_ey > move_sy)
+		else if (move_ey > move_sy)
 		{
 			dir = dirs::down;
-
+			
 			if (end.y + my_speed <= ground)
 			{
 				start.y += my_speed;
 				set_edges();
+				if (end.y >= move_ey)hero_moving = false;
 			}
+			else hero_moving = false;
 		}
+		else hero_moving = false;
 	}
 	else if (hor_dir)
 	{
@@ -399,9 +405,11 @@ void dll::CREATURES::move(float gear)
 			{
 				start.x -= my_speed;
 				set_edges();
+				if (start.x <= move_ex)hero_moving = false;
 			}
+			else hero_moving = false;
 		}
-		if (move_ex > move_sx)
+		else if (move_ex > move_sx)
 		{
 			dir = dirs::right;
 
@@ -409,8 +417,11 @@ void dll::CREATURES::move(float gear)
 			{
 				start.x += my_speed;
 				set_edges();
+				if (end.x >= move_ex)hero_moving = false;
 			}
+			else hero_moving = false;
 		}
+		else hero_moving = false;
 	}
 	else
 	{
@@ -424,24 +435,30 @@ void dll::CREATURES::move(float gear)
 				start.y = start.x * slope + intercept;
 				set_edges();
 
+				if (start.x <= move_ex)hero_moving = false;
+
 				if (start.x < 0)
 				{
 					start.x = 0;
 					set_edges();
+					hero_moving = false;
 				}
 				if (start.y < sky)
 				{
 					start.y = sky;
 					set_edges();
+					hero_moving = false;
 				}
 				if (end.y > ground)
 				{
 					start.y = ground - get_height();
 					set_edges();
+					hero_moving = false;
 				}
 			}
+			else hero_moving = false;
 		}
-		if (move_ex > move_sx)
+		else if (move_ex > move_sx)
 		{
 			dir = dirs::right;
 
@@ -451,23 +468,30 @@ void dll::CREATURES::move(float gear)
 				start.y = start.x * slope + intercept;
 				set_edges();
 
+				if (end.x >= move_ex)hero_moving = false;
+
 				if (end.x > scr_width)
 				{
 					start.x = scr_width - get_width();
 					set_edges();
+					hero_moving = false;
 				}
 				if (start.y < sky)
 				{
 					start.y = sky;
 					set_edges();
+					hero_moving = false;
 				}
 				if (end.y > ground)
 				{
 					start.y = ground - get_height();
 					set_edges();
+					hero_moving = false;
 				}
 			}
+			else hero_moving = false;
 		}
+		else hero_moving = false;
 	}
 }
 
