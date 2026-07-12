@@ -607,12 +607,19 @@ dll::CREATURES* dll::CREATURES::create(creatures what, float sx, float sy)
 
 float dll::CREATURES::rotate_angle(float oppos, float adjanced)
 {
-	if (move_ex < move_sx)oppos = -oppos;
-	if (move_ey < move_sy)adjanced = -adjanced;
+	float ret_angle = std::atan2(oppos, adjanced) * 180.0f / 3.14f;
 
-	float rad_angle{ std::atan2(oppos, adjanced) };
+	if (move_ey < center.y)
+	{
+		if (move_ex < center.x)ret_angle = 360.0f - ret_angle;
+	}
+	else if (move_ey > center.y)
+	{
+		if (move_ex > center.x)ret_angle = 180.0f - ret_angle;
+		else if (move_ex < center.x)ret_angle = 180.0f + ret_angle;
+	}
 
-	return rad_angle;
+	return ret_angle;
 }
 
 //////////////////////////////////////////////////
