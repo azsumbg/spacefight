@@ -512,7 +512,7 @@ bool dll::CREATURES::shot_move(float gear)
 			}
 			else return false;
 		}
-		if (move_ey > move_sy)
+		else if (move_ey > move_sy)
 		{
 			if (end.y + my_speed <= ground)
 			{
@@ -534,7 +534,7 @@ bool dll::CREATURES::shot_move(float gear)
 			}
 			else return false;
 		}
-		if (move_ex > move_sx)
+		else if (move_ex > move_sx)
 		{
 			if (end.x + my_speed <= scr_width)
 			{
@@ -557,6 +557,7 @@ bool dll::CREATURES::shot_move(float gear)
 
 				if (start.x < 0 || start.y < sky || end.y > ground || end.x > scr_width)return false;
 			}
+			else return false;
 		}
 		else if (move_ex > move_sx)
 		{
@@ -568,6 +569,7 @@ bool dll::CREATURES::shot_move(float gear)
 
 				if (start.x < 0 || start.y < sky || end.y > ground || end.x > scr_width)return false;
 			}
+			else return false;
 		}
 		else return false;
 	}
@@ -648,6 +650,170 @@ float dll::CREATURES::rotate_angle(float oppos, float adjanced)
 
 //////////////////////////////////////////////////
 
+// METEORS CLASS**********************************
+
+dll::METEORS::METEORS(meteors _what, float _sx, float _sy) :PROTON(D2D1_POINT_2F(_sx, _sy))
+{
+	type = _what;
+
+	switch (type)
+	{
+	case meteors::meteor1:
+		new_dims(250.0f, 273.0f);
+		speed = 0.3f;
+		lifes = 500;
+		max_frames = 9;
+		frame_delay = 7;
+		break;
+
+	case meteors::meteor2:
+		new_dims(150.0f, 71.0f);
+		lifes = 250;
+		max_frames = 4;
+		frame_delay = 14;
+		break;
+
+	case meteors::meteor3:
+		new_dims(192.0f, 190.0f);
+		speed = 0.4f;
+		lifes = 320;
+		max_frames = 19;
+		frame_delay = 3;
+		break;
+	}
+
+	max_frame_delay = frame_delay;
+}
+
+int dll::METEORS::get_frame()
+{
+	--frame_delay;
+	if (frame_delay <= 0)
+	{
+		frame_delay = max_frame_delay;
+		++frame;
+		if (frame > max_frames)frame = 0;
+	}
+
+	return frame;
+}
+
+void dll::METEORS::set_path(float targ_x, float targ_y)
+{
+	hor_dir = false;
+	ver_dir = false;
+
+	move_sx = start.x;
+	move_ex = targ_x;
+
+	move_sy = start.y;
+	move_ey = targ_y;
+
+	if ((move_sx == move_ex) || (move_ex > start.x && move_ex <= end.x))
+	{
+		ver_dir = true;
+		return;
+	}
+	if ((move_sy == move_ey) || (move_ey > start.y && move_ey <= end.y))
+	{
+		hor_dir = true;
+		return;
+	}
+
+	slope = (move_ey - move_sy) / (move_ex - move_sx);
+	intercept = start.y - slope * start.x;
+}
+bool dll::METEORS::move(float gear)
+{
+	float my_speed = speed + gear / 10.0f;
+
+	if (ver_dir)
+	{
+		if (move_ey < move_sy)
+		{
+			if (start.y - my_speed >= sky)
+			{
+				start.y -= my_speed;
+				set_edges();
+			}
+			else return false;
+		}
+		else if (move_ey > move_sy)
+		{
+			if (end.y + my_speed <= ground)
+			{
+				start.y += my_speed;
+				set_edges();
+			}
+			else return false;
+		}
+		else return false;
+	}
+	else if (hor_dir)
+	{
+		if (move_ex < move_sx)
+		{
+			if (start.x - my_speed >= 0)
+			{
+				start.x -= my_speed;
+				set_edges();
+			}
+			else return false;
+		}
+		else if (move_ex > move_sx)
+		{
+			if (end.x + my_speed <= scr_width)
+			{
+				start.x += my_speed;
+				set_edges();
+			}
+			else return false;
+		}
+		else return false;
+	}
+	else
+	{
+		if (move_ex < move_sx)
+		{
+			if (start.x - my_speed >= 0)
+			{
+				start.x -= my_speed;
+				start.y = start.x * slope + intercept;
+				set_edges();
+
+				if (start.x < 0 || start.y < sky || end.y > ground || end.x > scr_width)return false;
+			}
+			else return false;
+		}
+		else if (move_ex > move_sx)
+		{
+			if (end.x + my_speed <= scr_width)
+			{
+				start.x += my_speed;
+				start.y = start.x * slope + intercept;
+				set_edges();
+
+				if (start.x < 0 || start.y < sky || end.y > ground || end.x > scr_width)return false;
+			}
+			else return false;
+		}
+		else return false;
+	}
+
+	return true;
+}
+
+void dll::METEORS::Release()
+{
+	delete this;
+}
+
+dll::METEORS* dll::METEORS::create(meteors what, float sx, float sy)
+{
+	return new METEORS(what, sx, sy);
+}
+
+//////////////////////////////////////////////////
 
 // FUNCTIONS **********************************
 
