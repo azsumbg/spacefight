@@ -808,9 +808,28 @@ void dll::METEORS::Release()
 	delete this;
 }
 
-dll::METEORS* dll::METEORS::create(meteors what, float sx, float sy)
+dll::METEORS* dll::METEORS::create(meteors what, float sx, float sy, float ex, float ey, float oppos, float adjanced)
 {
-	return new METEORS(what, sx, sy);
+	METEORS* ret = new METEORS(what, sx, sy);
+
+	if (ret)
+	{
+		ret->set_path(ex, ey);
+
+		ret->angle = std::atan2(oppos, adjanced) * 180.0f / 3.14f;
+
+		if (ret->move_ey < ret->center.y)
+		{
+			if (ret->move_ex < ret->center.x)ret->angle = 360.0f - ret->angle;
+		}
+		else if (ret->move_ey > ret->center.y)
+		{
+			if (ret->move_ex > ret->center.x)ret->angle = 180.0f - ret->angle;
+			else if (ret->move_ex < ret->center.x)ret->angle = 180.0f + ret->angle;
+		}
+	}
+	
+	return ret;
 }
 
 //////////////////////////////////////////////////

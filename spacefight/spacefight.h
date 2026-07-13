@@ -554,17 +554,20 @@ namespace dll
 
 		METEORS(meteors _what, float _sx, float _sy);
 
+		void set_path(float targ_x, float targ_y);
+
 	public:
 		meteors type{ meteors::meteor1 };
 		int lifes{ 0 };
 
-		void set_path(float targ_x, float targ_y);
+		float angle{ 0 };
+
 		int get_frame();
 		bool move(float gear);
 
 		void Release();
 
-		static METEORS* create(meteors what, float sx, float sy);
+		static METEORS* create(meteors what, float sx, float sy, float ex, float ey, float oppos, float adjanced);
 	};
 
 	// FUNCTIONS **********************************
