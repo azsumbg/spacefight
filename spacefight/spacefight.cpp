@@ -908,7 +908,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 
 			
 			evil->set_path(targ_x, targ_y);
-			evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+			evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 				abs(evil->center.y - evil->get_move_target_y()));
 
 			evil->action = actions::move;
@@ -921,8 +921,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 		if (distance(evil->center, hero_center) <= evil->get_view_range())
 		{
 			evil->action = actions::attack;
-			evil->rotate_angle(abs(evil->center.x - hero_center.x),
-				abs(evil->center.y - hero_center.y));
+			evil->angle = evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
 			return;
 		}
 		else
@@ -930,7 +929,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 			if (distance(evil->center, hero_center) <= evil->get_view_range() * 1.5f)
 			{
 				evil->set_path(hero_center.x, hero_center.y);
-				evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
+				evil->angle = evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
 				evil->action = actions::move;
 				return;
 			}
@@ -943,7 +942,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x <= evil->get_move_target_x())
 					{
 						evil->set_path(scr_width - 200.0f, evil->center.y);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -952,7 +951,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x >= evil->get_move_target_x())
 					{
 						evil->set_path(200.0f, evil->center.y);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -961,7 +960,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y <= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, sky + 100.0f);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -970,7 +969,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y >= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, ground - 100.0f);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -986,8 +985,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 		if (distance(evil->center, hero_center) <= evil->get_view_range())
 		{
 			evil->action = actions::attack;
-			evil->rotate_angle(abs(evil->center.x - hero_center.x),
-				abs(evil->center.y - hero_center.y));
+			evil->angle = evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
 			return;
 		}
 		else if (!assets_centeres.empty())
@@ -998,7 +996,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 				float targ_y = assets_centeres[0].y;
 
 				evil->set_path(targ_x, targ_y);
-				evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+				evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 					abs(evil->center.y - evil->get_move_target_y()));
 
 				evil->action = actions::move;
@@ -1011,7 +1009,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 			if (distance(evil->center, hero_center) <= evil->get_view_range() * 1.5f)
 			{
 				evil->set_path(hero_center.x, hero_center.y);
-				evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
+				evil->angle = evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
 				evil->action = actions::move;
 				return;
 			}
@@ -1022,7 +1020,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x <= evil->get_move_target_x())
 					{
 						evil->set_path(scr_width - 200.0f, evil->center.y);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -1031,7 +1029,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x >= evil->get_move_target_x())
 					{
 						evil->set_path(200.0f, evil->center.y);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -1040,7 +1038,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y <= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, sky + 100.0f);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -1049,7 +1047,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y >= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, ground - 100.0f);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -1067,7 +1065,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x <= evil->get_move_target_x())
 					{
 						evil->set_path(scr_width - 200.0f, evil->center.y);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -1076,7 +1074,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x >= evil->get_move_target_x())
 					{
 						evil->set_path(200.0f, evil->center.y);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -1085,7 +1083,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y <= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, sky + 100.0f);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
@@ -1094,7 +1092,7 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y >= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, ground - 100.0f);
-						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+						evil->angle = evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
 							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
