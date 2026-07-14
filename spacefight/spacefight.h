@@ -41,6 +41,8 @@ namespace dll
 	public:
 		assets type{ assets::armor };
 		D2D1_RECT_F rect{};
+
+		bool gathered{ false };
 		
 		float get_opacity()
 		{

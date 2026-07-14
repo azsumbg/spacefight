@@ -332,6 +332,7 @@ dll::CREATURES::CREATURES(creatures _what, float _sx, float _sy) :PROTON(D2D1_PO
 	}
 
 	max_frame_delay = frame_delay;
+	max_attack_delay = attack_delay;
 }
 
 void dll::CREATURES::set_path(float targ_x, float targ_y)
@@ -372,6 +373,8 @@ void dll::CREATURES::move(float gear)
 		{
 			dir = dirs::up;
 
+			if (type != creatures::hero)angle = 0;
+
 			if (start.y - my_speed >= sky)
 			{
 				start.y -= my_speed;
@@ -385,6 +388,8 @@ void dll::CREATURES::move(float gear)
 		{
 			dir = dirs::down;
 			
+			if (type != creatures::hero)angle = 180.0f;
+
 			if (end.y + my_speed <= ground)
 			{
 				start.y += my_speed;
@@ -401,7 +406,9 @@ void dll::CREATURES::move(float gear)
 		{
 			dir = dirs::left;
 
-			if (start.x - my_speed >= 0)
+			if (type != creatures::hero)angle = 270.0f;
+
+			if (start.x - my_speed >= 0 - scr_width / 3.0f)
 			{
 				start.x -= my_speed;
 				set_edges();
@@ -413,7 +420,9 @@ void dll::CREATURES::move(float gear)
 		{
 			dir = dirs::right;
 
-			if (end.x + my_speed <= scr_width)
+			if (type != creatures::hero)angle = 90.0f;
+
+			if (end.x + my_speed <= scr_width + scr_width / 3.0f)
 			{
 				start.x += my_speed;
 				set_edges();
@@ -425,11 +434,13 @@ void dll::CREATURES::move(float gear)
 	}
 	else
 	{
+		if (type != creatures::hero)rotate_angle(abs(move_sx - move_ex), abs(move_sy - move_ey));
+
 		if (move_ex < move_sx)
 		{
 			dir = dirs::left;
 
-			if (start.x - my_speed >= 0)
+			if (start.x - my_speed >= 0 - scr_width / 3.0f)
 			{
 				start.x -= my_speed;
 				start.y = start.x * slope + intercept;
@@ -437,12 +448,7 @@ void dll::CREATURES::move(float gear)
 
 				if (start.x <= move_ex)hero_moving = false;
 
-				if (start.x < 0)
-				{
-					start.x = 0;
-					set_edges();
-					hero_moving = false;
-				}
+				if (start.x < 0)hero_moving = false;
 				if (start.y < sky)
 				{
 					start.y = sky;
@@ -462,7 +468,7 @@ void dll::CREATURES::move(float gear)
 		{
 			dir = dirs::right;
 
-			if (end.x + my_speed <= scr_width)
+			if (end.x + my_speed <= scr_width + scr_width / 3.0f)
 			{
 				start.x += my_speed;
 				start.y = start.x * slope + intercept;
@@ -470,12 +476,7 @@ void dll::CREATURES::move(float gear)
 
 				if (end.x >= move_ex)hero_moving = false;
 
-				if (end.x > scr_width)
-				{
-					start.x = scr_width - get_width();
-					set_edges();
-					hero_moving = false;
-				}
+				if (end.x > scr_width)hero_moving = false;
 				if (start.y < sky)
 				{
 					start.y = sky;
@@ -667,7 +668,7 @@ dll::METEORS::METEORS(meteors _what, float _sx, float _sy) :PROTON(D2D1_POINT_2F
 		break;
 
 	case meteors::meteor2:
-		new_dims(150.0f, 71.0f);
+		new_dims(112.0f, 165.0f);
 		lifes = 250;
 		max_frames = 4;
 		frame_delay = 14;
@@ -731,7 +732,7 @@ bool dll::METEORS::move(float gear)
 	{
 		if (move_ey < move_sy)
 		{
-			if (start.y - my_speed >= sky)
+			if (start.y - my_speed >= sky - scr_height / 3.0f)
 			{
 				start.y -= my_speed;
 				set_edges();
@@ -740,7 +741,7 @@ bool dll::METEORS::move(float gear)
 		}
 		else if (move_ey > move_sy)
 		{
-			if (end.y + my_speed <= ground)
+			if (end.y + my_speed <= ground + scr_height / 3.0f)
 			{
 				start.y += my_speed;
 				set_edges();
@@ -753,7 +754,7 @@ bool dll::METEORS::move(float gear)
 	{
 		if (move_ex < move_sx)
 		{
-			if (start.x - my_speed >= 0)
+			if (start.x - my_speed >= 0 - scr_width / 3.0f)
 			{
 				start.x -= my_speed;
 				set_edges();
@@ -762,7 +763,7 @@ bool dll::METEORS::move(float gear)
 		}
 		else if (move_ex > move_sx)
 		{
-			if (end.x + my_speed <= scr_width)
+			if (end.x + my_speed <= scr_width + scr_width / 3.0f)
 			{
 				start.x += my_speed;
 				set_edges();
@@ -775,25 +776,25 @@ bool dll::METEORS::move(float gear)
 	{
 		if (move_ex < move_sx)
 		{
-			if (start.x - my_speed >= 0)
+			if (start.x - my_speed >= 0 - scr_width / 3.0f)
 			{
 				start.x -= my_speed;
 				start.y = start.x * slope + intercept;
 				set_edges();
 
-				if (start.x < 0 || start.y < sky || end.y > ground || end.x > scr_width)return false;
+				if (start.y < sky - scr_height / 3.0f || end.y > ground + scr_height / 3.0f)return false;
 			}
 			else return false;
 		}
 		else if (move_ex > move_sx)
 		{
-			if (end.x + my_speed <= scr_width)
+			if (end.x + my_speed <= scr_width + scr_width / 3.0f)
 			{
 				start.x += my_speed;
 				start.y = start.x * slope + intercept;
 				set_edges();
 
-				if (start.x < 0 || start.y < sky || end.y > ground || end.x > scr_width)return false;
+				if(start.y < sky - scr_height / 3.0f || end.y > ground + scr_height / 3.0f)return false;
 			}
 			else return false;
 		}
@@ -907,6 +908,9 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 
 			
 			evil->set_path(targ_x, targ_y);
+			evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+				abs(evil->center.y - evil->get_move_target_y()));
+
 			evil->action = actions::move;
 			
 			return;
@@ -917,7 +921,64 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 		if (distance(evil->center, hero_center) <= evil->get_view_range())
 		{
 			evil->action = actions::attack;
+			evil->rotate_angle(abs(evil->center.x - hero_center.x),
+				abs(evil->center.y - hero_center.y));
 			return;
+		}
+		else
+		{
+			if (distance(evil->center, hero_center) <= evil->get_view_range() * 1.5f)
+			{
+				evil->set_path(hero_center.x, hero_center.y);
+				evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
+				evil->action = actions::move;
+				return;
+			}
+			else
+			{
+				evil->action = actions::patrol;
+
+				if (evil->dir == dirs::left)
+				{
+					if (evil->center.x <= evil->get_move_target_x())
+					{
+						evil->set_path(scr_width - 200.0f, evil->center.y);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+				else if (evil->dir == dirs::right)
+				{
+					if (evil->center.x >= evil->get_move_target_x())
+					{
+						evil->set_path(200.0f, evil->center.y);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+				else if (evil->dir == dirs::up)
+				{
+					if (evil->center.y <= evil->get_move_target_y())
+					{
+						evil->set_path(evil->center.x, sky + 100.0f);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+				else if (evil->dir == dirs::down)
+				{
+					if (evil->center.y >= evil->get_move_target_y())
+					{
+						evil->set_path(evil->center.x, ground - 100.0f);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+				
+				evil->action = actions::patrol;
+				
+				return;
+			}
 		}
 	}
 	else if (evil->action != actions::attack)
@@ -925,13 +986,32 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 		if (distance(evil->center, hero_center) <= evil->get_view_range())
 		{
 			evil->action = actions::attack;
+			evil->rotate_angle(abs(evil->center.x - hero_center.x),
+				abs(evil->center.y - hero_center.y));
 			return;
+		}
+		else if (!assets_centeres.empty())
+		{
+			if (distance(evil->center, assets_centeres[0]) <= evil->get_view_range())
+			{
+				float targ_x = assets_centeres[0].x;
+				float targ_y = assets_centeres[0].y;
+
+				evil->set_path(targ_x, targ_y);
+				evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+					abs(evil->center.y - evil->get_move_target_y()));
+
+				evil->action = actions::move;
+
+				return;
+			}
 		}
 		else if (evil->action == actions::patrol)
 		{
 			if (distance(evil->center, hero_center) <= evil->get_view_range() * 1.5f)
 			{
 				evil->set_path(hero_center.x, hero_center.y);
+				evil->rotate_angle(abs(evil->center.x - hero_center.x), abs(evil->center.y - hero_center.y));
 				evil->action = actions::move;
 				return;
 			}
@@ -942,7 +1022,8 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x <= evil->get_move_target_x())
 					{
 						evil->set_path(scr_width - 200.0f, evil->center.y);
-						return;
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
 				else if (evil->dir == dirs::right)
@@ -950,7 +1031,8 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.x >= evil->get_move_target_x())
 					{
 						evil->set_path(200.0f, evil->center.y);
-						return;
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
 				else if (evil->dir == dirs::up)
@@ -958,7 +1040,8 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y <= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, sky + 100.0f);
-						return;
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
 				else if (evil->dir == dirs::down)
@@ -966,7 +1049,8 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 					if (evil->center.y >= evil->get_move_target_y())
 					{
 						evil->set_path(evil->center.x, ground - 100.0f);
-						return;
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
 					}
 				}
 			}
@@ -978,6 +1062,43 @@ void dll::AIMove(CREATURES*& evil, BAG<D2D1_POINT_2F>& assets_centeres, BAG<D2D1
 				|| (evil->dir == dirs::up && evil->center.y <= evil->get_move_target_y())
 				|| (evil->dir == dirs::down && evil->center.y >= evil->get_move_target_y()))
 			{
+				if (evil->dir == dirs::left)
+				{
+					if (evil->center.x <= evil->get_move_target_x())
+					{
+						evil->set_path(scr_width - 200.0f, evil->center.y);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+				else if (evil->dir == dirs::right)
+				{
+					if (evil->center.x >= evil->get_move_target_x())
+					{
+						evil->set_path(200.0f, evil->center.y);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+				else if (evil->dir == dirs::up)
+				{
+					if (evil->center.y <= evil->get_move_target_y())
+					{
+						evil->set_path(evil->center.x, sky + 100.0f);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+				else if (evil->dir == dirs::down)
+				{
+					if (evil->center.y >= evil->get_move_target_y())
+					{
+						evil->set_path(evil->center.x, ground - 100.0f);
+						evil->rotate_angle(abs(evil->center.x - evil->get_move_target_x()),
+							abs(evil->center.y - evil->get_move_target_y()));
+					}
+				}
+
 				evil->action = actions::patrol;
 				return;
 			}
